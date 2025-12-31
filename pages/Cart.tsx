@@ -6,6 +6,14 @@ import { WHATSAPP_NUMBER } from '../constants';
 
 const Cart: React.FC = () => {
     const { cartItems, removeFromCart, updateQuantity, totalPrice, totalItems, clearCart } = useCart();
+    const [paymentMethod, setPaymentMethod] = React.useState<string>('pix');
+
+    const paymentOptions = [
+        { id: 'credit', label: 'Cartão de Crédito', icon: 'credit_card' },
+        { id: 'debit', label: 'Cartão de Débito', icon: 'payments' },
+        { id: 'pix', label: 'PIX', icon: 'qr_code_2' },
+        { id: 'cash', label: 'Dinheiro', icon: 'money_bag' }
+    ];
 
     const handleCheckout = () => {
         if (cartItems.length === 0) return;
@@ -20,8 +28,9 @@ const Cart: React.FC = () => {
             message += `   Preço: R$ ${item.product.price.toFixed(2).replace('.', ',')}\n\n`;
         });
 
-        message += `*Total: R$ ${totalPrice.toFixed(2).replace('.', ',')}*\n\n`;
-        message += `Aguardo seu retorno para combinarmos a entrega e o pagamento!`;
+        message += `*Total: R$ ${totalPrice.toFixed(2).replace('.', ',')}*\n`;
+        message += `*Forma de Pagamento:* ${paymentOptions.find(o => o.id === paymentMethod)?.label}\n\n`;
+        message += `Aguardo seu retorno para combinarmos a entrega!`;
 
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
@@ -113,18 +122,36 @@ const Cart: React.FC = () => {
                                 <span>Total</span>
                                 <span>R$ {totalPrice.toFixed(2).replace('.', ',')}</span>
                             </div>
-                        </div>
+                            <div className="mb-8">
+                                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Forma de Pagamento</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {paymentOptions.map((option) => (
+                                        <button
+                                            key={option.id}
+                                            onClick={() => setPaymentMethod(option.id)}
+                                            className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all gap-1 ${paymentMethod === option.id
+                                                ? 'border-primary bg-primary/10 text-primary-dark shadow-sm'
+                                                : 'border-slate-100 bg-white text-slate-400 hover:border-slate-200 dark:bg-surface-dark dark:border-slate-800'
+                                                }`}
+                                        >
+                                            <span className="material-symbols-outlined text-xl">{option.icon}</span>
+                                            <span className="text-[10px] font-bold uppercase">{option.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
 
-                        <button
-                            onClick={handleCheckout}
-                            className="w-full bg-primary hover:bg-primary-dark text-accent-navy py-4 rounded-full font-extrabold shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
-                        >
-                            <span className="material-symbols-outlined">chat</span>
-                            Finalizar no WhatsApp
-                        </button>
-                        <p className="mt-4 text-[10px] text-center text-slate-400 px-4">
-                            Ao clicar em finalizar, você será redirecionado para o WhatsApp com o resumo do seu pedido.
-                        </p>
+                            <button
+                                onClick={handleCheckout}
+                                className="w-full bg-primary hover:bg-primary-dark text-accent-navy py-4 rounded-full font-extrabold shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
+                            >
+                                <span className="material-symbols-outlined">chat</span>
+                                Finalizar no WhatsApp
+                            </button>
+                            <p className="mt-4 text-[10px] text-center text-slate-400 px-4">
+                                Ao clicar em finalizar, você será redirecionado para o WhatsApp com o resumo do seu pedido.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
