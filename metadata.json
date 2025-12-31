@@ -1,0 +1,8 @@
+{
+  "name": "Bitt Kids - Moda Infantil",
+  "description": "Uma plataforma completa de e-commerce infantil com catálogo filtrável, assistente de compras por IA e painel administrativo para gestão de produtos.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
