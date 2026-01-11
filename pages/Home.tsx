@@ -10,6 +10,14 @@ const Home: React.FC = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const categoriesPlaceholder = [
+    { name: 'Blusas', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALBNAxHhbXGbgNvslnfx_CQ_FZtd37YP49uxR3YUzegvCMvsDTSj3J7j_tm-XK6YwkyT-vvI7FDvQJnzmKNjWSvjN9UafOtv1jxDw33Z8pAYtHFevMj-EYI21xdbGhFvlYSgScFJMdJfRZT9l7kDKLs7Z62nbsNEZi1T1rO8NdrMQIYmYU-zGgRgj6NPhT75cbq5MHG25UDBqj28pYNZjGMXamo1yk-XdQEDe1-z7uGBD9qUV_Yt-Lbrn9acMWB8-HiOdVxVItL-Q' },
+    { name: 'Vestidos', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuANQ8KVjs3Q3Rt6BKNLcSeeSJLTlpCARqdm3qkkX7XEiniPffVuOuoI-TAheoit0o1me3rm4eiine5950Qc0rRpwVaF5m6cncVaLaAdbvovGrDie4draG7APqYhSGif29JkaWJUAf0ianybMuhDDBCNWdS7qbcRTXn5grW-fdNjOAWcPnJFhIO5y_6rbkXI16Bwdr9rwNHWb5Su_JX6ToglqSLI8XG3eJxY2ZWxngRWc2OxIqHLNt99iHryw_9fDQ_dWkfXENd5UZE' },
+    { name: 'Conjuntos', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCIr0CmNajQ03zMawCELzLdT0RjhoJlU1R7JfMdrFlu8RuYRqKZPAz-jIahuWxHnxLD3bFn3dHTfeK0Ece23sFSRjITAfH5pLMKHNX-cFYBktuWC77F0fVs-V-UTm4PzbpGd0Dfmrh8THIXWUT3e5LSMorl71Wrow3qFA1_99cD8-V6wfZyJ4SVB75gVFvOMoofuYLEcGpjgrtnOCbTzfNlWGOaoF_z4qdxjwFdzGkhYu86StrkcA3qA5XNLypG9XeVBP1Xs4nnN_w' },
+    { name: 'Calçados', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC_GpI5E_kmtjMQ3sBgQkY4dpuSA1RzPPc3B_DhQw_2RArckgWCApu8cCP3a4db8cjFR7gj9AGMjMyNwVQTmNCoInhVDKvSYx62GRBhKVmhBfsqLbKZdrWH0MGpT3Sb_udBPQXKNwDQhLkk-3OFy7oEWkL8nJFey6SJUdAlqRs8BElj75jXfxGPT_toRqRjy6vjOiKSHL3Yfp6TGLMV1sf7FxHmuMt6G65rzO0vZPMB_caRvwoNWUw_xD-TJq2I4w7Y5zByz2cxS2c' },
+    { name: 'Acessórios', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBtmWJrQWueEE-OmbHijtyTB5hZUUXC-6Nkh3tLwrCrzM0Wnu1ICstdlxTFkzi23hXqBxP-1fHoc-sZqzJMiAGem2HS_x1_mx20CA4mvNM8q2qRjlSAX5j0Xvh60-S-rV6EDauZGYD5Ob5L1SOpS1Fg80LUfk9eeVDa8M4D8gh0bZjBUd77_ksIH2rjpOlo32CBCDr-22fsZP5XYVzlUAL9ftStRYh7Zt4Ntw-MQOwxHo4RNLSAmCsLsJgUaT1OXKQnV1j_qi1Maek' },
+  ];
+
   useEffect(() => {
     fetchFeaturedProducts();
   }, []);
@@ -19,7 +27,8 @@ const Home: React.FC = () => {
     const { data, error } = await supabase
       .from('products')
       .select('*, categories(name)')
-      .limit(4);
+      .order('created_at', { ascending: false })
+      .limit(8);
 
     if (error) {
       console.error('Error fetching featured products:', error);
@@ -34,112 +43,108 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full pt-16">
+    <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="relative w-full overflow-hidden px-6 py-12 lg:px-12 lg:py-20">
-        <div className="mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-12 lg:flex-row lg:justify-between">
-          <div className="flex flex-col items-center gap-6 text-center lg:items-start lg:text-left lg:w-1/2">
-            <div className="inline-flex items-center rounded-full bg-accent-yellow/20 px-3 py-1 text-xs font-bold text-yellow-700 dark:text-yellow-400">
-              <span className="mr-1">✨</span> Nova Coleção Disponível
-            </div>
-            <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-accent-navy dark:text-white lg:text-6xl">
-              Moda infantil com <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-dark to-accent-pink">amor</span> e conforto
-            </h2>
-            <p className="max-w-md text-lg font-medium text-slate-600 dark:text-slate-300">
+      <section className="max-w-7xl mx-auto px-4 py-8 md:py-12 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white dark:bg-surface-dark rounded-3xl p-6 md:p-12 shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-0 transform translate-x-1/2 -translate-y-1/2"></div>
+          <div className="z-10 order-2 md:order-1">
+            <span className="inline-block bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-xs font-bold px-3 py-1 rounded-full mb-4">✨ Nova Coleção Disponível</span>
+            <h1 className="text-4xl md:text-6xl font-black font-display text-gray-900 dark:text-white leading-tight mb-6">
+              Moda infantil com <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">amor</span> e conforto
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
               Peças lindas e coloridas para o dia a dia do seu pequeno. Escolha o look perfeito e peça direto no WhatsApp!
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
-              <Link to="/catalog" className="flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-accent-navy shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 hover:shadow-xl hover:bg-primary-dark w-full sm:w-auto">
-                <span className="material-symbols-outlined">chat</span>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/catalog" className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-primary/30 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+                <i className="material-icons-outlined">shopping_bag</i>
                 Comprar agora
               </Link>
-              <Link to="/catalog" className="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-transparent px-8 py-4 text-base font-bold text-accent-navy hover:border-primary hover:bg-primary/10 dark:border-slate-700 dark:text-white w-full sm:w-auto transition-all">
+              <Link to="/catalog" className="bg-transparent border-2 border-gray-200 dark:border-gray-600 hover:border-primary text-gray-700 dark:text-white font-bold py-3 px-8 rounded-full hover:bg-gray-50 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
                 Ver catálogo
               </Link>
             </div>
           </div>
-          <div className="relative w-full lg:w-1/2 flex justify-center lg:justify-end">
-            <div className="absolute -top-10 -right-10 h-64 w-64 rounded-full bg-accent-pink/20 blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 h-40 w-40 rounded-full bg-primary/20 blur-2xl"></div>
-            <div className="relative aspect-[4/3] w-full max-w-[600px] overflow-hidden rounded-[2rem] shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 bg-slate-200" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=800&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
-            </div>
+          <div className="relative z-10 h-64 md:h-96 w-full rounded-2xl overflow-hidden order-1 md:order-2 group">
+            <img
+              alt="Crianças brincando"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwAeBfVTU6AWJRN54_qX6n5s1S_E6qXs8F_o1K91ksdtiwoW07X8uj5cLJmJhZTarLMZq6-vCFxQ1ug89PfGQQB0UkdEBoN0FAgkgWOql2qiXZ9wdZ7wb5aoy31JGxhjZuPAJU2LW3sxU4_OslxCWHky-Q3v7wheb1kkDKx__cvBkUf9rYR2Xsa0qaOD6kl9erDy4ZvhfSGxAeFyM53UB-GCSPvzI45XhfhW5pytc8Ajdsv-ka6T8h1XdFJEzijQcwUvbaASYYN9U"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="w-full bg-white px-6 py-16 dark:bg-surface-dark lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 text-center">
-            <h3 className="text-3xl font-bold text-accent-navy dark:text-white">Por que escolher a Bitt Kids?</h3>
-            <p className="mt-4 text-slate-600 dark:text-slate-400">Cuidamos de cada detalhe para o conforto do seu filho.</p>
-          </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { icon: 'checkroom', title: 'Conforto Garantido', desc: 'Tecidos macios que não incomodam a pele.', color: 'bg-primary/20 text-primary-dark' },
-              { icon: 'verified', title: 'Qualidade Premium', desc: 'Peças duráveis para todas as brincadeiras.', color: 'bg-accent-pink/20 text-pink-500' },
-              { icon: 'forum', title: 'Atendimento Fácil', desc: 'Compre tudo pelo WhatsApp sem complicação.', color: 'bg-accent-green/20 text-green-600' },
-              { icon: 'local_shipping', title: 'Entrega Rápida', desc: 'Chega rapidinho na sua casa com todo cuidado.', color: 'bg-accent-orange/20 text-orange-600' }
-            ].map((benefit, i) => (
-              <div key={i} className="group flex flex-col items-center gap-4 rounded-2xl bg-background-light p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:bg-background-dark border border-slate-100 dark:border-slate-800">
-                <div className={`flex size-14 items-center justify-center rounded-full ${benefit.color} group-hover:scale-110 transition-transform`}>
-                  <span className="material-symbols-outlined text-3xl">{benefit.icon}</span>
-                </div>
-                <div>
-                  <h4 className="text-lg font-bold text-accent-navy dark:text-white">{benefit.title}</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">{benefit.desc}</p>
-                </div>
+      {/* Categories Section */}
+      <section className="max-w-7xl mx-auto px-4 py-8 w-full">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Categorias</h2>
+          <Link to="/catalog" className="text-primary hover:text-primary-dark font-medium text-sm flex items-center">
+            Ver todas <i className="material-icons-outlined text-sm ml-1">arrow_forward</i>
+          </Link>
+        </div>
+        <div className="flex gap-4 md:gap-8 overflow-x-auto pb-4 hide-scrollbar snap-x">
+          {categoriesPlaceholder.map((cat, i) => (
+            <Link key={i} to={`/catalog?category=${cat.name}`} className="flex flex-col items-center min-w-[100px] group snap-start">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-surface-dark shadow-md group-hover:border-primary transition-all duration-300">
+                <img alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" src={cat.image} />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Collection */}
-      <section className="w-full px-6 py-16 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <h2 className="text-3xl font-extrabold text-accent-navy dark:text-white">Destaques da Coleção</h2>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">Os queridinhos das mamães e papais.</p>
-            </div>
-            <Link to="/catalog" className="group flex items-center gap-1 text-sm font-bold text-primary-dark hover:text-primary transition-colors">
-              Ver catálogo completo
-              <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
+              <span className="mt-3 font-semibold text-gray-700 dark:text-gray-200 group-hover:text-primary">{cat.name}</span>
             </Link>
-          </div>
-          {loading ? (
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {[1, 2, 3, 4].map(i => <div key={i} className="h-64 rounded-3xl bg-slate-100 animate-pulse"></div>)}
+          ))}
+          <Link to="/catalog" className="flex flex-col items-center min-w-[100px] group snap-start">
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white dark:border-surface-dark shadow-md group-hover:border-primary transition-all duration-300 bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+              <i className="material-icons-outlined text-4xl text-gray-400">add</i>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {featuredProducts.length > 0 ? featuredProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
-              )) : (
-                <p className="col-span-full text-center text-slate-400 py-10">Adicione produtos no admin para vê-los aqui!</p>
-              )}
-            </div>
-          )}
+            <span className="mt-3 font-semibold text-gray-700 dark:text-gray-200 group-hover:text-primary">Ver Mais</span>
+          </Link>
         </div>
       </section>
 
-      {/* Newsletter / Contact CTA */}
-      <section className="w-full px-6 py-16 lg:px-12">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center rounded-[2.5rem] bg-gradient-to-br from-[#e0f7fa] to-[#e8f5e9] p-8 text-center dark:from-slate-800 dark:to-slate-900 sm:p-16">
-          <span className="mb-4 flex size-16 items-center justify-center rounded-full bg-white shadow-lg dark:bg-surface-dark">
-            <span className="material-symbols-outlined text-4xl text-primary-dark dark:text-primary">smartphone</span>
-          </span>
-          <h2 className="mb-4 text-3xl font-extrabold text-accent-navy dark:text-white sm:text-4xl">Fale com a gente!</h2>
-          <p className="mb-8 max-w-lg text-lg text-slate-600 dark:text-slate-300">
-            Tem dúvidas sobre tamanhos ou quer ver mais modelos? Nossa equipe adora ajudar você a escolher o melhor look.
-          </p>
-          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" className="flex items-center justify-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-lg font-bold text-white shadow-lg transition-transform hover:-translate-y-1 hover:brightness-105 active:scale-95">
-            <span className="material-symbols-outlined">chat</span>
-            Falar no WhatsApp
-          </a>
+      {/* Latest Products Section */}
+      <section className="max-w-7xl mx-auto px-4 pb-16 w-full">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white inline-block relative pb-2 font-display">
+            Acabaram de Chegar
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-primary rounded-full"></div>
+          </h2>
         </div>
+
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <div key={i} className="aspect-[4/5] rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"></div>)}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {featuredProducts.length > 0 ? featuredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            )) : (
+              <p className="col-span-full text-center text-slate-400 py-10">Nenhum produto encontrado.</p>
+            )}
+          </div>
+        )}
       </section>
+
+      {/* WhatsApp Floating Button (Moved to App or Layout if wanted, but fine here) */}
+      <a
+        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-24 right-6 z-50 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 hover:scale-110 transition-all flex items-center justify-center animate-bounce"
+      >
+        <svg className="bi bi-whatsapp" fill="currentColor" height="32" viewBox="0 0 16 16" width="32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"></path>
+        </svg>
+      </a>
+
+      {/* Checkout CTA Bar */}
+      <Link to="/cart" className="bg-primary text-white py-4 text-center cursor-pointer hover:bg-primary-dark transition-colors sticky bottom-0 z-40 block">
+        <span className="font-bold text-lg flex items-center justify-center gap-2">
+          FINALIZAR PEDIDO <i className="material-icons-outlined">send</i>
+        </span>
+      </Link>
     </div>
   );
 };

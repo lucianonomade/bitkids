@@ -45,24 +45,24 @@ const Catalog: React.FC = () => {
   }, [products, searchTerm, selectedCategory, priceRange]);
 
   return (
-    <div className="flex flex-col w-full pt-16">
-      <section className="w-full bg-white dark:bg-surface-dark px-6 py-8 lg:px-12 border-b border-[#e7f3f2] dark:border-slate-800">
+    <div className="flex flex-col w-full">
+      <section className="w-full bg-white dark:bg-surface-dark px-6 py-8 lg:px-12 border-b border-gray-100 dark:border-gray-800">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
-                <h2 className="text-3xl font-extrabold text-accent-navy dark:text-white">Nosso Catálogo</h2>
+                <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white font-display">Nosso Catálogo</h2>
                 <p className="mt-2 text-slate-600 dark:text-slate-400">Explore nossa coleção completa de roupas infantis.</p>
               </div>
               <div className="relative w-full md:w-96">
                 <div className="relative group">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
-                    <span className="material-symbols-outlined">search</span>
+                    <i className="material-icons-outlined">search</i>
                   </span>
                   <input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 py-3.5 pl-12 pr-4 text-sm font-medium focus:border-primary focus:ring-0 focus:bg-white transition-all dark:border-slate-700 dark:bg-background-dark dark:text-white"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm font-medium focus:border-primary focus:ring-2 focus:ring-primary focus:bg-white transition-all dark:border-slate-700 dark:bg-background-dark dark:text-white outline-none"
                     placeholder="O que você procura? (ex: vestido, pijama...)"
                     type="text"
                   />
@@ -70,14 +70,14 @@ const Catalog: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex w-full overflow-x-auto pb-2 no-scrollbar gap-3 pt-2">
+            <div className="flex w-full overflow-x-auto pb-2 hide-scrollbar gap-3 pt-2">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat as any)}
                   className={`whitespace-nowrap rounded-full px-6 py-2.5 text-sm font-bold transition-all ${selectedCategory === cat
-                      ? 'bg-primary text-accent-navy shadow-md shadow-primary/20'
-                      : 'bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-primary/30'
+                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                    : 'bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-primary/30'
                     }`}
                 >
                   {cat}
@@ -111,7 +111,7 @@ const Catalog: React.FC = () => {
                       onChange={(e) => setPriceRange(parseInt(e.target.value))}
                       className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-primary"
                     />
-                    <div className="flex justify-between mt-2 text-xs font-bold text-primary-dark">
+                    <div className="flex justify-between mt-2 text-xs font-bold text-primary">
                       <span>R$ 0</span>
                       <span>R$ {priceRange}</span>
                     </div>
@@ -123,7 +123,7 @@ const Catalog: React.FC = () => {
         </div>
       </section>
 
-      <section className="w-full px-6 py-12 lg:px-12">
+      <section className="w-full px-4 py-12">
         <div className="mx-auto max-w-7xl">
           {loading ? (
             <div className="col-span-full py-20 text-center">
@@ -131,17 +131,17 @@ const Catalog: React.FC = () => {
               <p className="mt-4 text-slate-500">Buscando os melhores looks...</p>
             </div>
           ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filteredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <span className="material-symbols-outlined text-6xl text-slate-200 mb-4">search_off</span>
-              <h3 className="text-xl font-bold text-slate-500">Nenhum produto encontrado</h3>
+              <i className="material-icons-outlined text-6xl text-slate-200 mb-4">search_off</i>
+              <h3 className="text-xl font-bold text-slate-500 font-display">Nenhum produto encontrado</h3>
               <p className="text-slate-400 mt-2">Tente ajustar seus filtros ou busca.</p>
-              <button onClick={() => { setSearchTerm(''); setSelectedCategory('Todos'); setPriceRange(300); }} className="mt-6 text-primary-dark font-bold hover:underline">
+              <button onClick={() => { setSearchTerm(''); setSelectedCategory('Todos'); setPriceRange(300); }} className="mt-6 text-primary font-bold hover:underline">
                 Limpar todos os filtros
               </button>
             </div>

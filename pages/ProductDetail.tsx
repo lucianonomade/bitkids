@@ -73,18 +73,18 @@ const ProductDetail: React.FC = () => {
   };
 
   return (
-    <div className="w-full pt-16">
+    <div className="w-full">
       <div className="w-full px-6 py-4 lg:px-12">
         <div className="mx-auto flex max-w-7xl items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-          <Link className="hover:text-primary-dark" to="/">Início</Link>
-          <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <Link className="hover:text-primary-dark" to="/catalog">Catálogo</Link>
-          <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <span className="font-bold text-accent-navy dark:text-white">{product.name}</span>
+          <Link className="hover:text-primary" to="/">Início</Link>
+          <i className="material-icons-outlined text-sm">chevron_right</i>
+          <Link className="hover:text-primary" to="/catalog">Catálogo</Link>
+          <i className="material-icons-outlined text-sm">chevron_right</i>
+          <span className="font-bold text-gray-900 dark:text-white">{product.name}</span>
         </div>
       </div>
 
-      <section className="w-full px-6 pb-12 pt-4 lg:px-12 lg:pb-20">
+      <section className="w-full px-4 pb-12 pt-4 lg:pb-20">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
             <div className="flex w-full flex-col gap-4 lg:w-1/2">
@@ -102,20 +102,20 @@ const ProductDetail: React.FC = () => {
 
             <div className="flex w-full flex-col lg:w-1/2">
               <div className="mb-2 flex items-center gap-2">
-                <div className="flex text-accent-yellow">
-                  <span className="material-symbols-outlined text-lg fill-current">star</span>
-                  <span className="material-symbols-outlined text-lg fill-current">star</span>
-                  <span className="material-symbols-outlined text-lg fill-current">star</span>
-                  <span className="material-symbols-outlined text-lg fill-current">star</span>
-                  <span className="material-symbols-outlined text-lg">star_half</span>
+                <div className="flex text-yellow-500">
+                  <i className="material-icons-outlined text-lg">star</i>
+                  <i className="material-icons-outlined text-lg">star</i>
+                  <i className="material-icons-outlined text-lg">star</i>
+                  <i className="material-icons-outlined text-lg">star</i>
+                  <i className="material-icons-outlined text-lg">star_half</i>
                 </div>
                 <span className="text-sm font-medium text-slate-500 dark:text-slate-400">(42 avaliações)</span>
               </div>
-              <h1 className="mb-2 text-3xl font-extrabold leading-tight text-accent-navy dark:text-white sm:text-4xl">
+              <h1 className="mb-2 text-3xl font-extrabold leading-tight text-gray-900 dark:text-white sm:text-4xl font-display">
                 {product.name}
               </h1>
               <div className="mb-6 flex items-end gap-3">
-                <span className="text-4xl font-extrabold text-primary-dark dark:text-primary">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+                <span className="text-4xl font-extrabold text-primary">R$ {product.price.toFixed(2).replace('.', ',')}</span>
                 {product.old_price && (
                   <span className="mb-1 text-lg text-slate-400 line-through">R$ {product.old_price.toFixed(2).replace('.', ',')}</span>
                 )}
@@ -127,8 +127,8 @@ const ProductDetail: React.FC = () => {
               <div className="mb-8 space-y-6 rounded-2xl bg-slate-50 p-6 dark:bg-surface-dark border border-slate-100 dark:border-slate-800">
                 <div>
                   <div className="mb-3 flex items-center justify-between">
-                    <span className="font-bold text-accent-navy dark:text-white">Tamanho:</span>
-                    <Link to="/size-guide" className="text-xs font-semibold text-primary-dark underline decoration-dotted underline-offset-2 hover:text-primary">Tabela de Medidas</Link>
+                    <span className="font-bold text-gray-900 dark:text-white">Tamanho:</span>
+                    <Link to="/size-guide" className="text-xs font-semibold text-primary underline decoration-dotted underline-offset-2 hover:text-primary-dark">Tabela de Medidas</Link>
                   </div>
                   <div className="flex flex-wrap gap-3">
                     {product.sizes?.length > 0 ? product.sizes.map(size => (
@@ -153,19 +153,19 @@ const ProductDetail: React.FC = () => {
                 <button
                   onClick={handleAddToCart}
                   className={`flex flex-1 items-center justify-center gap-3 rounded-2xl px-8 py-5 text-xl font-bold border-2 transition-all active:scale-95 ${addedFeedback
-                    ? 'bg-accent-green border-accent-green text-green-900'
-                    : 'bg-white border-primary text-accent-navy hover:bg-primary/10'
+                    ? 'bg-green-500 border-green-500 text-white'
+                    : 'bg-white border-primary text-primary hover:bg-primary/10'
                     }`}
                 >
-                  <span className="material-symbols-outlined">{addedFeedback ? 'check_circle' : 'add_shopping_cart'}</span>
+                  <i className="material-icons-outlined">{addedFeedback ? 'check_circle' : 'add_shopping_cart'}</i>
                   {addedFeedback ? 'Adicionado!' : 'Adicionar ao Carrinho'}
                 </button>
 
                 <button
                   onClick={handleBuyNow}
-                  className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-primary px-8 py-5 text-xl font-bold text-accent-navy shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 hover:bg-primary-dark active:scale-95"
+                  className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-primary px-8 py-5 text-xl font-bold text-white shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 hover:bg-primary-dark active:scale-95"
                 >
-                  <span className="material-symbols-outlined">chat</span>
+                  <i className="material-icons-outlined">chat</i>
                   Comprar agora
                 </button>
               </div>
